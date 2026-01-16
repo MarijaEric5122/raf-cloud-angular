@@ -1,0 +1,42 @@
+<h2 class="mb-4 text-center">Nova mašina</h2>
+
+<form [formGroup]="machineForm" (ngSubmit)="onSubmit()" class="container mb-3 p-3 border rounded shadow-sm">
+  <div class="mb-3">
+    <label class="form-label">Naziv:</label>
+    <input
+      type="text"
+      class="form-control"
+      formControlName="name"
+      placeholder="Unesi naziv"
+    />
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label">Tip:</label>
+    <input
+      type="text"
+      class="form-control"
+      formControlName="type"
+      placeholder="Unesi tip"
+    />
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label">Opis:</label>
+    <textarea
+      class="form-control"
+      formControlName="description"
+      rows="3"
+      placeholder="Opciono"
+    ></textarea>
+  </div>
+
+  <div class="d-flex gap-2">
+    <button type="submit" class="btn btn-primary" [disabled]="machineForm.invalid">
+      Sačuvaj
+    </button>
+    <button type="button" class="btn btn-secondary" (click)="cancel()">
+      Odustani
+    </button>
+  </div>
+</form>

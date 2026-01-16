@@ -1,0 +1,51 @@
+<div class="container mt-4">
+  <h2 class="mb-3">Zakazane operacije</h2>
+
+  <div *ngIf="schedules$ | async as rows; else loading">
+    <div *ngIf="rows.length === 0" class="text-muted text-center py-3">
+      Nema zakazanih operacija.
+    </div>
+
+    <div class="table-responsive" *ngIf="rows.length > 0">
+      <table class="table table-striped table-bordered align-middle">
+        <thead class="table-light">
+          <tr>
+            <th>ID</th>
+            <th>Mašina</th>
+            <th>Operacija</th>
+            <th>Vreme</th>
+            <th>Status</th>
+            <th>Greška</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr *ngFor="let r of rows">
+            <td>{{ r.id }}</td>
+            <td>{{ r.machineId }}</td>
+            <td>{{ r.operation }}</td>
+            <td>{{ r.runAt | date : "dd.MM.yyyy HH:mm" }}</td>
+            <td>
+              <span
+                class="badge"
+                [ngClass]="{
+                  'bg-secondary':
+                    r.status === 'PENDING' || r.status === 'RUNNING',
+                  'bg-success': r.status === 'DONE',
+                  'bg-danger': r.status === 'FAILED'
+                }"
+              >
+                {{ r.status }}
+              </span>
+            </td>
+            <td>{{ r.errorMessage || "-" }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <ng-template #loading>
+    <div class="text-muted text-center py-3">Učitavanje...</div>
+  </ng-template>
+</div>

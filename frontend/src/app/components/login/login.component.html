@@ -1,0 +1,42 @@
+<div
+  class="container d-flex justify-content-center align-items-center"
+  style="min-height: 100vh"
+>
+  <div class="card shadow-sm" style="width: 100%; max-width: 380px">
+    <div class="card-body">
+      <h3 class="card-title text-center mb-4">Prijava</h3>
+
+      <form (ngSubmit)="onSubmit()">
+        <div class="mb-3">
+          <label class="form-label">Email</label>
+          <input
+            type="email"
+            class="form-control"
+            [(ngModel)]="email"
+            name="email"
+            required
+            placeholder="Unesi email"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Lozinka</label>
+          <input
+            type="password"
+            class="form-control"
+            [(ngModel)]="password"
+            name="password"
+            required
+            placeholder="Unesi lozinku"
+          />
+        </div>
+
+        <button type="submit" class="btn btn-primary w-100">Uloguj se</button>
+
+        <p *ngIf="errorMsg" class="text-danger mt-3 mb-0">
+          {{ errorMsg }}
+        </p>
+      </form>
+    </div>
+  </div>
+</div>

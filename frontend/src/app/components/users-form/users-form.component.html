@@ -1,0 +1,85 @@
+<div class="container mt-4">
+  <div class="card shadow-sm">
+    <div class="card-header">
+      <h5 class="mb-0">{{ isEdit ? 'Izmena korisnika' : 'Novi korisnik' }}</h5>
+    </div>
+
+    <div class="card-body">
+      <form (ngSubmit)="onSubmit()" #userForm="ngForm">
+
+        <div class="mb-3">
+          <label class="form-label">Ime</label>
+          <input
+            type="text"
+            class="form-control"
+            [(ngModel)]="user.firstName"
+            name="firstName"
+            required
+            placeholder="Unesi ime" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Prezime</label>
+          <input
+            type="text"
+            class="form-control"
+            [(ngModel)]="user.lastName"
+            name="lastName"
+            required
+            placeholder="Unesi prezime" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Email</label>
+          <input
+            type="email"
+            class="form-control"
+            [(ngModel)]="user.email"
+            name="email"
+            required
+            placeholder="Unesi email" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Lozinka</label>
+          <input
+            type="password"
+            class="form-control"
+            [(ngModel)]="user.password"
+            name="password"
+            [required]="!isEdit"
+            placeholder="Unesi lozinku" />
+          <div *ngIf="isEdit" class="form-text">
+            Ako ostaviš prazno, zadržaće staru lozinku.
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label d-block">Dozvole</label>
+          <div class="row">
+            <div class="col-12 col-md-6" *ngFor="let perm of allPermissions">
+              <div class="form-check">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  [checked]="user.permissions.includes(perm)"
+                  (change)="togglePermission(perm)"
+                  [id]="perm" />
+                <label class="form-check-label" [for]="perm">
+                  {{ perm }}
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="d-flex justify-content-end gap-2 mt-3">
+          <button type="button" class="btn btn-secondary" (click)="cancel()">Odustani</button>
+          <button type="submit" class="btn btn-primary" [disabled]="!userForm.form.valid">
+            Sačuvaj
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

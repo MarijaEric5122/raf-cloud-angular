@@ -1,0 +1,63 @@
+<div class="container mt-4">
+  <div class="card shadow-sm">
+    <div class="card-header d-flex justify-content-between align-items-center">
+      <h5 class="mb-0">Korisnici</h5>
+      <button
+        class="btn btn-primary btn-sm"
+        (click)="newUser()"
+        [disabled]="!canCreate"
+      >
+        + Novi korisnik
+      </button>
+    </div>
+
+    <div class="card-body p-0">
+      <table class="table table-striped mb-0">
+        <thead class="table-light">
+          <tr>
+            <th>Ime</th>
+            <th>Prezime</th>
+            <th>Email</th>
+            <th>Dozvole</th>
+            <th class="text-end">Akcije</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let u of users">
+            <td
+              (click)="goToEdit(u)"
+              [class.text-primary]="canUpdate"
+              [class.cursor-pointer]="canUpdate"
+            >
+              {{ u.firstName }}
+            </td>
+            <td
+              (click)="goToEdit(u)"
+              [class.text-primary]="canUpdate"
+              [class.cursor-pointer]="canUpdate"
+            >
+              {{ u.lastName }}
+            </td>
+            <td
+              (click)="goToEdit(u)"
+              [class.text-primary]="canUpdate"
+              [class.cursor-pointer]="canUpdate"
+            >
+              {{ u.email }}
+            </td>
+            <td>{{ u.permissions.join(", ") }}</td>
+            <td class="text-end">
+              <button
+                class="btn btn-sm btn-danger"
+                (click)="deleteUser(u.id)"
+                [disabled]="!canDelete"
+              >
+                Obriši
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

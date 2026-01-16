@@ -1,0 +1,50 @@
+<div class="container mt-4">
+  <div class="row justify-content-center">
+    <div class="col-lg-10">
+      <div class="card shadow-sm">
+        <div
+          class="card-header d-flex justify-content-between align-items-center"
+        >
+          <h5 class="mb-0">Istorija grešaka</h5>
+        </div>
+
+        <div
+          class="card-body"
+          *ngIf="machinesErrorLogs$ | async as logs; else loading"
+        >
+          <div *ngIf="logs.length === 0" class="text-muted text-center py-3">
+            Nema grešaka.
+          </div>
+
+          <div class="table-responsive" *ngIf="logs.length > 0">
+            <table class="table table-striped table-bordered align-middle mb-0">
+              <thead class="table-light">
+                <tr>
+                  <th>Datum</th>
+                  <th>Mašina</th>
+                  <th>Operacija</th>
+                  <th>Poruka</th>
+                  <th>Kreirao</th>
+                </tr>
+              </thead>
+
+              <tbody>
+                <tr *ngFor="let l of logs">
+                  <td>{{ l.date | date : "dd.MM.yyyy HH:mm" }}</td>
+                  <td>{{ l.machineId }}</td>
+                  <td>{{ l.operation }}</td>
+                  <td>{{ l.message }}</td>
+                  <td>{{ l.userId }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <ng-template #loading>
+          <div class="text-muted text-center py-3">Učitavanje...</div>
+        </ng-template>
+      </div>
+    </div>
+  </div>
+</div>

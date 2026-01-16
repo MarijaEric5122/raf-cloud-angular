@@ -1,0 +1,13 @@
+.top-nav {
+  display: flex;
+  gap: 12px;
+  background: #eee;
+  padding: 10px;
+  align-items: center;
+}
+.top-nav a {
+  text-decoration: none;
+}
+.top-nav button {
+  margin-left: auto;
+}

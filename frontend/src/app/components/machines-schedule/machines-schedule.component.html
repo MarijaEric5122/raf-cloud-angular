@@ -1,0 +1,94 @@
+<div class="container mt-4">
+  <h2>Zakaži akciju za mašinu {{ machineId }}</h2>
+
+  <div *ngIf="errorMsg" class="alert alert-danger mt-3">
+    {{ errorMsg }}
+  </div>
+
+  <div class="card mt-3">
+    <div class="card-body">
+      <form [formGroup]="scheduleForm" (ngSubmit)="scheduleAction()">
+        <div class="mb-3">
+          <label for="actionSelect" class="form-label">Akcija</label>
+          <select
+            id="actionSelect"
+            class="form-select"
+            formControlName="action"
+          >
+            <option value="" disabled>Izaberi akciju</option>
+            <option *ngFor="let action of actions" [value]="action">
+              {{ action }}
+            </option>
+          </select>
+
+          <div
+            *ngIf="
+              scheduleForm.get('action')?.invalid &&
+              scheduleForm.get('action')?.touched
+            "
+            class="text-danger"
+          >
+            Akcija je obavezna.
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label for="dateInput" class="form-label">Datum</label>
+          <input
+            type="date"
+            id="dateInput"
+            class="form-control"
+            formControlName="date"
+          />
+
+          <div
+            *ngIf="
+              scheduleForm.get('date')?.invalid &&
+              scheduleForm.get('date')?.touched
+            "
+            class="text-danger"
+          >
+            Datum je obavezan.
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label for="timeInput" class="form-label">Vreme</label>
+          <input
+            type="time"
+            id="timeInput"
+            class="form-control"
+            formControlName="time"
+          />
+
+          <div
+            *ngIf="
+              scheduleForm.get('time')?.invalid &&
+              scheduleForm.get('time')?.touched
+            "
+            class="text-danger"
+          >
+            Vreme je obavezno.
+          </div>
+        </div>
+
+        <button
+          type="submit"
+          class="btn btn-primary me-2"
+          [disabled]="scheduleForm.invalid || submitting"
+        >
+          {{ submitting ? "Zakazujem..." : "Zakaži" }}
+        </button>
+
+        <button
+          type="button"
+          class="btn btn-secondary"
+          [routerLink]="['/machines']"
+          [disabled]="submitting"
+        >
+          Odustani
+        </button>
+      </form>
+    </div>
+  </div>
+</div>

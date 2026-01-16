@@ -1,0 +1,183 @@
+<div
+  *ngIf="!(canSearchMachines$ | async)"
+  class="alert alert-danger mt-4 container"
+>
+  Nemaš dozvolu da vidiš mašine.
+</div>
+
+<div class="container mt-4" *ngIf="canSearchMachines$ | async">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h2 class="mb-0">Pretraga mašina</h2>
+
+    <a
+      [routerLink]="(canCreateMachine$ | async) ? '/machines/new' : null"
+      [class.disabled]="!(canCreateMachine$ | async)"
+      class="btn btn-success"
+    >
+      + Nova mašina
+    </a>
+  </div>
+
+  <div class="card mb-4">
+    <div class="card-body">
+      <form class="row g-3" [formGroup]="searchForm">
+        <div class="col-md-3">
+          <label class="form-label">Naziv</label>
+          <input
+            type="text"
+            class="form-control"
+            formControlName="name"
+            placeholder="npr. App Server"
+          />
+        </div>
+
+        <div class="col-md-3">
+          <label class="form-label d-block">Stanje</label>
+          <div class="form-check" *ngFor="let s of allStates">
+            <input
+              class="form-check-input"
+              type="checkbox"
+              [checked]="isStateSelected(s)"
+              (change)="toggleState(s)"
+              [id]="'state-' + s"
+            />
+            <label class="form-check-label" [for]="'state-' + s">
+              {{ s }}
+            </label>
+          </div>
+        </div>
+
+        <div class="col-md-3">
+          <label class="form-label">Početni datum</label>
+          <input type="date" class="form-control" formControlName="startDate" />
+        </div>
+
+        <div class="col-md-3">
+          <label class="form-label">Krajnji datum</label>
+          <input type="date" class="form-control" formControlName="endDate" />
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div *ngIf="machines$ | async as machines; else loading">
+    <div *ngIf="machines.length > 0; else noMachines">
+      <table class="table table-striped table-bordered align-middle shadow-sm">
+        <thead class="table-light">
+          <tr>
+            <th>ID</th>
+            <th>Naziv</th>
+            <th>Tip</th>
+            <th>Stanje</th>
+            <th>Kreirao</th>
+            <th>Datum</th>
+            <th class="text-center">Zakazivanje</th>
+            <th>Akcije</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr *ngFor="let m of machines">
+            <td>{{ m.id }}</td>
+            <td>{{ m.name }}</td>
+            <td>{{ m.type }}</td>
+
+            <!-- ✅ State badge: koristi busy + busyAction -->
+            <td>
+              <span
+                class="badge"
+                [ngClass]="{
+                  'bg-success': m.state === 'UPALJENA' && !m.busy,
+                  'bg-danger': m.state === 'UGASENA' && !m.busy,
+                  'bg-secondary': m.busy
+                }"
+              >
+                {{ m.busy ? m.busyAction || "U TOKU" : m.state }}
+              </span>
+            </td>
+
+            <!-- ✅ Creator -->
+            <td>{{ m.createdByEmail || m.createdById }}</td>
+
+            <td>{{ m.createdAt | date : "dd.MM.yyyy" }}</td>
+
+            <!-- ✅ Scheduling -->
+            <td class="text-center">
+              <a
+                *ngIf="!m.schedule"
+                [routerLink]="['/machines/schedule', m.id]"
+                class="btn btn-sm btn-primary"
+                [class.disabled]="!(canSchedule$ | async) || m.busy"
+              >
+                + Zakazi
+              </a>
+
+              <div *ngIf="m.schedule">
+                <div>{{ m.schedule.date }} {{ m.schedule.time }}</div>
+                <div>{{ m.schedule.operation }}</div>
+              </div>
+            </td>
+
+            <!-- ✅ Actions: dok je busy -> sivo + disabled -->
+            <td>
+              <button
+                class="btn btn-sm me-3"
+                [ngClass]="m.busy ? 'btn-secondary' : 'btn-outline-primary'"
+                [disabled]="
+                  m.busy ||
+                  m.state === 'UPALJENA' ||
+                  !(canStartMachine$ | async)
+                "
+                (click)="start(m.id)"
+              >
+                UPALI
+              </button>
+
+              <button
+                class="btn btn-sm me-3"
+                [ngClass]="m.busy ? 'btn-secondary' : 'btn-outline-warning'"
+                [disabled]="
+                  m.busy || m.state === 'UGASENA' || !(canStopMachine$ | async)
+                "
+                (click)="stop(m.id)"
+              >
+                UGASI
+              </button>
+
+              <button
+                class="btn btn-sm me-3"
+                [ngClass]="m.busy ? 'btn-secondary' : 'btn-outline-info'"
+                [disabled]="
+                  m.busy ||
+                  m.state === 'UGASENA' ||
+                  !(canRestartMachine$ | async)
+                "
+                (click)="restart(m.id)"
+              >
+                RESTARTUJ
+              </button>
+
+              <button
+                class="btn btn-sm"
+                style="margin-left: 50px"
+                [ngClass]="m.busy ? 'btn-secondary' : 'btn-outline-danger'"
+                [disabled]="m.busy || !(canDestroyMachine$ | async)"
+                (click)="delete(m.id)"
+              >
+                UNISTI
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <ng-template #noMachines>
+    <p class="text-center text-muted">Nema pronađenih mašina.</p>
+  </ng-template>
+
+  <ng-template #loading>
+    <p class="text-center text-muted">Učitavanje...</p>
+  </ng-template>
+</div>
