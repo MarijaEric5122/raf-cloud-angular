@@ -82,7 +82,6 @@
             <td>{{ m.name }}</td>
             <td>{{ m.type }}</td>
 
-            <!-- ✅ State badge: koristi busy + busyAction -->
             <td>
               <span
                 class="badge"
@@ -96,12 +95,10 @@
               </span>
             </td>
 
-            <!-- ✅ Creator -->
             <td>{{ m.createdByEmail || m.createdById }}</td>
 
             <td>{{ m.createdAt | date : "dd.MM.yyyy" }}</td>
 
-            <!-- ✅ Scheduling -->
             <td class="text-center">
               <a
                 *ngIf="!m.schedule"
@@ -118,7 +115,6 @@
               </div>
             </td>
 
-            <!-- ✅ Actions: dok je busy -> sivo + disabled -->
             <td>
               <button
                 class="btn btn-sm me-3"

@@ -56,15 +56,13 @@ export class UsersFormComponent implements OnInit {
       return;
     }
 
-    // Napravimo kopiju objekta da ne menjamo originalni model na formi
+    // Clone form model
     const userToSave = { ...this.user };
 
     if (!this.isEdit) {
-      // AKO JE KREIRANJE: Moramo ukloniti ID ili ga staviti na null
-      // jer Java očekuje null da bi dodelila novi ID iz baze
+      // Remove id for create
       // @ts-ignore
       delete userToSave.id;
-      // Ako delete ne radi, probaj: (userToSave as any).id = null;
     }
 
     const userAction = this.isEdit
@@ -76,7 +74,6 @@ export class UsersFormComponent implements OnInit {
         this.router.navigate(['/users']);
       },
       error: (err) => {
-        // Ako i dalje dobijaš 409, ovde ćemo ispisati šta kaže backend
         alert('Došlo je do greške: ' + err.status);
         console.error(err);
       },

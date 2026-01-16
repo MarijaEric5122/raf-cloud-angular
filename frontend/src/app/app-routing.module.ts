@@ -40,7 +40,6 @@ const routes: Routes = [
         data: { permissions: ['CAN_UPDATE_USERS'] },
       },
 
-      //promeni i ti da bude sve sa CAN_SEARCH_MACHINES itd...
       {
         path: 'machines',
         component: MachinesSearchComponent,
@@ -73,7 +72,6 @@ const routes: Routes = [
         data: { permissions: ['CAN_READ_SCHEDULES'] },
       },
 
-      //redic=rect na home kad se uspesno loguje
       { path: '', redirectTo: '/home', pathMatch: 'full' },
     ],
   },

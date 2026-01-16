@@ -84,7 +84,7 @@ export class MachinesSearchComponent implements OnInit, OnDestroy {
       })
     );
 
-    // WS connect + refresh on event
+    // WS connect and refresh on event
     this.ws.connect();
 
     this.ws.events$.pipe(takeUntil(this.destroy$)).subscribe((ev) => {
@@ -96,8 +96,6 @@ export class MachinesSearchComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
-    // opcionalno: ako ti ne treba WS kad odeš sa stranice
-    //this.ws.disconnect();
   }
 
   toggleState(state: MachineState): void {

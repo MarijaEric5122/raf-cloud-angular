@@ -11,9 +11,9 @@ export class UserService {
 
   constructor(private http: HttpClient) {}
 
-  // Pomoćna metoda za kreiranje headera sa tokenom
+  // Build auth headers
   private getHeaders() {
-    const token = localStorage.getItem('token'); // Ili kako si ga već nazvala u AuthService
+    const token = localStorage.getItem('token');
     return new HttpHeaders().set('Authorization', `Bearer ${token}`);
   }
 

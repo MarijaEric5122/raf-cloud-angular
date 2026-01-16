@@ -27,15 +27,15 @@ export class MachinesErrorLogsListComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    // 1) učitaj odmah + svaki put kad okinemo refresh -> GET
+    // initial load and refresh
     this.machinesErrorLogs$ = this.refreshTrigger.pipe(
       switchMap(() => this.errorService.getAllVisible())
     );
 
-    // 2) WS connect
+    // WS connect
     this.ws.connect();
 
-    // 3) kad backend pošalje "refresh" na /topic/errors -> okini trigger
+    // trigger on /topic/errors refresh
     this.ws.errorsRefresh$
       .pipe(takeUntil(this.destroy$))
       .subscribe(() => this.refreshTrigger.next());

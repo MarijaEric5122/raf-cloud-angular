@@ -26,15 +26,15 @@ export class MachinesScheduleListComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    // 1) učitaj odmah + svaki put kad okinemo refreshTrigger -> radi GET
+    // initial load and refresh
     this.schedules$ = this.refreshTrigger.pipe(
       switchMap(() => this.machinesService.getSchedules())
     );
 
-    // 2) WS connect (ako već nije konektovan)
+    // WS connect if needed
     this.ws.connect();
 
-    // 3) kad backend pošalje "refresh" na /topic/schedules -> okini trigger
+    // trigger on /topic/schedules refresh
     this.ws.schedulesRefresh$
       .pipe(takeUntil(this.destroy$))
       .subscribe(() => this.refreshTrigger.next());

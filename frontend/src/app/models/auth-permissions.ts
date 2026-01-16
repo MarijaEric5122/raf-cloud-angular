@@ -1,12 +1,12 @@
 
 export const authPermissions: string[] = [
-  // User dozvole
+  // User permissions
   'CAN_READ_USERS',
   'CAN_CREATE_USERS',
   'CAN_UPDATE_USERS',
   'CAN_DELETE_USERS',
 
-  // Machine dozvole
+  // Machine permissions
   'CAN_SEARCH_MACHINES',
   'CAN_START_MACHINES',
   'CAN_STOP_MACHINES',

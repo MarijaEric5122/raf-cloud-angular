@@ -24,7 +24,6 @@ export class PermissionGuard implements CanActivate {
     return this.authService.authUser$.pipe(
       first(),
       map((user) => {
-        // --- POČETAK LOGOVA ---
         console.log('%c--- DEBUG: PermissionGuard ---', 'color: orange; font-weight: bold;');
         console.log('Pokušaj pristupa na rutu:', state.url);
         console.log('Potrebne permisije za ovu stranicu:', requiredPermissions);
@@ -44,7 +43,6 @@ export class PermissionGuard implements CanActivate {
           return false;
         }
 
-        // Proveravamo svaku potrebnu permisiju pojedinačno
         const hasRequiredPermissions = requiredPermissions.every((permission) => {
           const exists = user.permissions.includes(permission);
           if (!exists) {
@@ -57,7 +55,6 @@ export class PermissionGuard implements CanActivate {
 
         console.log('Konačni rezultat provere:', hasRequiredPermissions);
         console.log('%c------------------------------', 'color: orange; font-weight: bold;');
-        // --- KRAJ LOGOVA ---
 
         if (hasRequiredPermissions) {
           return true;

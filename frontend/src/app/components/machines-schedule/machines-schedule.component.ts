@@ -13,7 +13,7 @@ export class MachinesScheduleComponent implements OnInit {
 
   machineId: number | null = null;
 
-  // UI akcije (lepo za korisnika)
+  // UI actions
   actions: Array<'UPALI' | 'UGASI' | 'RESTARTUJ'> = [
     'UPALI',
     'UGASI',
@@ -23,7 +23,7 @@ export class MachinesScheduleComponent implements OnInit {
   submitting = false;
   errorMsg: string | null = null;
 
-  // Mapiranje UI -> backend
+  // UI to backend mapping
   private actionMap: Record<
     'UPALI' | 'UGASI' | 'RESTARTUJ',
     'START' | 'STOP' | 'RESTART'
@@ -45,7 +45,7 @@ export class MachinesScheduleComponent implements OnInit {
     this.machineId = rawId ? Number(rawId) : null;
 
     this.scheduleForm = this.fb.group({
-      action: ['', Validators.required], // UPALI/UGASI/RESTARTUJ
+      action: ['', Validators.required],
       date: ['', Validators.required],
       time: ['', Validators.required],
     });
@@ -70,7 +70,7 @@ export class MachinesScheduleComponent implements OnInit {
       time: string;
     };
 
-    // ✅ šaljemo backend akciju: START/STOP/RESTART
+    // send backend action: START/STOP/RESTART
     const schedule: MachineSchedule = {
       date,
       time,
