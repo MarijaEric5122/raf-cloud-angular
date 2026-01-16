@@ -3,6 +3,7 @@ package com.example.backend_MarijaNatasa.machine.machine_error;
 import com.example.backend_MarijaNatasa.machine.Machine;
 import com.example.backend_MarijaNatasa.machine.MachineRepository;
 import com.example.backend_MarijaNatasa.user.User;
+import com.example.backend_MarijaNatasa.ws.ErrorLogWsPublisher;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -15,11 +16,14 @@ public class MachinesErrorLogService {
 
     private final MachinesErrorLogRepository errorLogRepository;
     private final MachineRepository machineRepository;
+    private final ErrorLogWsPublisher errorLogWsPublisher;
 
     public MachinesErrorLogService(MachinesErrorLogRepository errorLogRepository,
-                                   MachineRepository machineRepository) {
+                                   MachineRepository machineRepository,
+                                   ErrorLogWsPublisher errorLogWsPublisher) {
         this.errorLogRepository = errorLogRepository;
         this.machineRepository = machineRepository;
+        this.errorLogWsPublisher = errorLogWsPublisher;
     }
 
     // obična pomoćna metoda – upiši jednu grešku
@@ -36,6 +40,9 @@ public class MachinesErrorLogService {
         log.setUserId(userId);
 
         errorLogRepository.save(log);
+
+        // WS refresh signal za listu errora
+        errorLogWsPublisher.publishRefresh();
     }
 
     // čitanje za UI – admin vidi sve, ostali svoje mašine

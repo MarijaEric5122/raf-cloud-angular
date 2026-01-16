@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Client, IMessage } from '@stomp/stompjs';
 import * as SockJS from 'sockjs-client';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Subject } from 'rxjs';
 import { MachineWsEvent } from '../models/machine-ws-event.model';
 
 @Injectable({ providedIn: 'root' })
@@ -13,6 +13,12 @@ export class WebsocketService {
 
   private eventsSubject = new BehaviorSubject<MachineWsEvent | null>(null);
   events$ = this.eventsSubject.asObservable();
+
+  private errorsRefreshSubject = new Subject<void>();
+  errorsRefresh$ = this.errorsRefreshSubject.asObservable();
+
+  private schedulesRefreshSubject = new Subject<void>();
+  schedulesRefresh$ = this.schedulesRefreshSubject.asObservable();
 
   private wsUrl = 'http://localhost:8080/ws';
 
@@ -35,6 +41,14 @@ export class WebsocketService {
       this.client?.subscribe('/topic/machines', (msg: IMessage) => {
         const payload = JSON.parse(msg.body) as MachineWsEvent;
         this.eventsSubject.next(payload);
+      });
+
+      this.client?.subscribe('/topic/errors', () => {
+        this.errorsRefreshSubject.next();
+      });
+
+      this.client?.subscribe('/topic/schedules', () => {
+        this.schedulesRefreshSubject.next();
       });
     };
 

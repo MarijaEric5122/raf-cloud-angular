@@ -2,6 +2,7 @@ package com.example.backend_MarijaNatasa.machine.machine_schedule;
 
 import com.example.backend_MarijaNatasa.machine.MachineService;
 import com.example.backend_MarijaNatasa.machine.machine_error.MachinesErrorLogService;
+import com.example.backend_MarijaNatasa.ws.ScheduleWsPublisher;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,13 +13,16 @@ public class MachineScheduleExecutor {
     private final MachineScheduleRepository scheduleRepository;
     private final MachineService machineService;
     private final MachinesErrorLogService errorLogService;
+    private final ScheduleWsPublisher scheduleWsPublisher;
 
     public MachineScheduleExecutor(MachineScheduleRepository scheduleRepository,
                                    MachineService machineService,
-                                   MachinesErrorLogService errorLogService) {
+                                   MachinesErrorLogService errorLogService,
+                                   ScheduleWsPublisher scheduleWsPublisher) {
         this.scheduleRepository = scheduleRepository;
         this.machineService = machineService;
         this.errorLogService = errorLogService;
+        this.scheduleWsPublisher = scheduleWsPublisher;
     }
 
     @Async
@@ -62,5 +66,8 @@ public class MachineScheduleExecutor {
         }
 
         scheduleRepository.save(schedule);
+
+        // WS refresh signal nakon izmene statusa schedulera
+        scheduleWsPublisher.publishRefresh();
     }
 }

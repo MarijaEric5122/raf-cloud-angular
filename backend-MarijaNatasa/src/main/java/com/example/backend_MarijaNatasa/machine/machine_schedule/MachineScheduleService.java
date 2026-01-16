@@ -3,6 +3,7 @@ package com.example.backend_MarijaNatasa.machine.machine_schedule;
 import com.example.backend_MarijaNatasa.machine.Machine;
 import com.example.backend_MarijaNatasa.machine.MachineRepository;
 import com.example.backend_MarijaNatasa.user.User;
+import com.example.backend_MarijaNatasa.ws.ScheduleWsPublisher;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,13 +19,16 @@ public class MachineScheduleService {
     private final MachineRepository machineRepository;
     private final MachineScheduleRepository scheduleRepository;
     private final MachineScheduleExecutor executor;
+    private final ScheduleWsPublisher scheduleWsPublisher;
 
     public MachineScheduleService(MachineRepository machineRepository,
                                   MachineScheduleRepository scheduleRepository,
-                                  MachineScheduleExecutor executor) {
+                                  MachineScheduleExecutor executor,
+                                  ScheduleWsPublisher scheduleWsPublisher) {
         this.machineRepository = machineRepository;
         this.scheduleRepository = scheduleRepository;
         this.executor = executor;
+        this.scheduleWsPublisher = scheduleWsPublisher;
     }
 
     public void scheduleMachine(Long machineId,
@@ -51,6 +55,9 @@ public class MachineScheduleService {
         schedule.setCreatedBy(currentUser);
 
         scheduleRepository.save(schedule);
+
+        // WS refresh signal za listu schedulera
+        scheduleWsPublisher.publishRefresh();
     }
 
     @Scheduled(fixedRate = 10000)
